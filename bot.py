@@ -115,17 +115,17 @@ async def maple_task(): #메이플 공지 알림
     while not bot.is_closed():
         try:
             response = requests.get(MAPLESTORY_URL)
-            if response.status_code == 200:
-                html = response.text
-                soup = BeautifulSoup(html, "html.parser")
-                notices = soup.select(".list_board a")
-                if notices:
-                    latest_notice = notices[0]
-                    notice_title = latest_notice.text
-                    notice_link = latest_notice.get("href")
+            response.encoding ='utf-8'
+            html = response.text
+            soup = BeautifulSoup(html, "html.parser")
+            notices = soup.select("tr")
+            if notices:
+                latest_notice = notices[0]
+                notice_title = latest_notice.text
+                notice_link = latest_notice.get("href")
 
-                    message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
-                    await channel.send(message)
+                message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
+                await channel.send(message)
         except Exception as e:
             print(f"An error occurred while checking for notices: {str(e)}")
 
@@ -240,6 +240,31 @@ async def 우르스(ctx):
         hours, remainder = divmod(time_until_urs_end.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         await ctx.send(f"우르스 2배 진행 중 입니다.. → {hours}시간 {minutes}분 {seconds}초")
+#------------------
+# 테스트
+#---------------------
+@bot.command(aliases=['ㄱㅈ'])
+async def 공지테스트(ctx):
+    guild = bot.get_guild(GUILD_ID)
+    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    await channel.send(f"공지체크")
+    try:
+        response = requests.get(MAPLESTORY_URL)
+        response.encoding ='utf-8'
+        html = response.text
+        soup = BeautifulSoup(html, "html.parser")
+        notices = soup.select("tr")
+        if notices:
+            latest_notice = notices[0]
+            notice_title = latest_notice.text
+            notice_link = latest_notice.get("href")
+
+            message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
+            await channel.send(message)
+    except Exception as e:
+        print(f"An error occurred while checking for notices: {str(e)}")
+
+
 
 #--------------------------------------
 #             mvp
