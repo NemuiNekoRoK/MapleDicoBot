@@ -221,7 +221,7 @@ async def 도움말(ctx):
 #--------------------------------------
 #             우르스 커맨드
 #--------------------------------------
-@bot.command(aliases=['ㅇㄽ','ㅇㄹㅅ', 'dft', 'Dft']) #우르스 명령어
+@bot.command(aliases=['ㅇㄽ','ㅇㄹㅅ']) #우르스 명령어
 async def 우르스(ctx):
     current_time = datetime.utcnow().astimezone(KST)
     urs_start_time = datetime(current_time.year, current_time.month, current_time.day, URS_START_HOUR).astimezone(KST)
