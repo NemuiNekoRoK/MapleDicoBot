@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import asyncio
 
 #환경변수
-TOKEN = open("DiscordToken", "r").readline()
+TOKEN = open("DiscordToken.txt", "r").readline()
 GUILD_ID = 1115695314955931679
 CHANNEL_ID = "notice"
 MAPLESTORY_URL = "https://maplestory.nexon.com/News/Notice"
