@@ -259,7 +259,7 @@ async def 공지테스트(ctx):
 
         latest_notice = notices[0]
         notice_title = latest_notice.span.text
-        href = latest_notice.attrs['href']
+        href = latest_notice.a.attrs['href']
         notice_link = f"{MAPLE_URL}{href}"
 
         message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
