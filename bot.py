@@ -252,15 +252,15 @@ async def 공지테스트(ctx):
         response = requests.get(MAPLESTORY_URL)
         response.encoding ='utf-8'
         html = response.text
-        soup = BeautifulSoup(html, "html.parser")
-        notices = soup.select("tr")
-        if notices:
-            latest_notice = notices[0]
-            notice_title = latest_notice.text
-            notice_link = latest_notice.get("href")
+        soup = BeautifulSoup(html, 'html.parser')
+        notices = soup.select('tr')
 
-            message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
-            await channel.send(message)
+        latest_notice = notices[0]
+        notice_title = latest_notice.text
+        notice_link = latest_notice.get('href')
+
+        message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
+        await channel.send(message)
     except Exception as e:
         print(f"An error occurred while checking for notices: {str(e)}")
 
