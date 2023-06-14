@@ -257,8 +257,8 @@ async def 공지테스트(ctx):
         notices = noticeBanner.select('li')
 
         latest_notice = notices[0]
-        notice_title = latest_notice.text
-        notice_link = latest_notice.get('href')
+        notice_title = latest_notice.span.text
+        notice_link = latest_notice.a['herf']
 
         message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
         await channel.send(message)
