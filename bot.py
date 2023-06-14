@@ -73,11 +73,7 @@ async def task_urs():
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     #time = datetime.datetime.now()
-    stemp = f"{now.strftime('%Y-%m-%d %X')}"
-    await channel.send(f"최초타임스탬프 {stemp}")
-    await channel.send("Task1 Urs")
-    await channel.send(f"우르스 시작시간 {urs_start_time.strftime('%Y-%m-%d %X')}")
-    await channel.send(f"우르스 종료시간 {urs_end_time.strftime('%Y-%m-%d %X')}")
+
     await urs_start_task(seconds_until_urs_start)
     await urs_end_task()
 
