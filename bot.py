@@ -8,12 +8,24 @@ from bs4 import BeautifulSoup
 import asyncio
 
 #환경변수
-TOKEN = "MTExNTY5NDc0NDY4OTk3MTI5Mg.GQWWYg.Dl1789waz61VwLkY9VK-ieWkw9Y-fxHeTJnwg0"
+TOKEN = open("DiscordToken", "r").readline()
 GUILD_ID = 1115695314955931679
 CHANNEL_ID = "notice"
 MAPLESTORY_URL = "https://maplestory.nexon.com/News/Notice"
 URS_START_HOUR = 4 #utc 기준
 URS_END_HOUR = 13
+RESET_ALTER_HOUR_CONTENT = 14
+RESET_ALTER_HOUR_BOSS = 11
+
+#알림텍스트 
+URS_START = "우르스 2배 이벤트 시작"
+URS_END = "우르스 2배이벤트 종료"
+CONTENT_RESET_DAILY = "오후 11시입니다. 일일컨텐츠를 확인해 주세요\n1. 마일리지 적립\n2. 몬컬보상\n3. 기여도 보스\n4. 길드 출석\n5. 몬파\n6. 황금마차\n7. 일일퀘스트\n8. 이벤트퀘스트\n9.무릉포인트수령"
+CONTENT_RESET_WEEKLY = "일요일 오후 11시입니다. 주간 컨텐츠를 확인해 주세요"
+BOSS_RESET = "수요일 오후 8시입니다. 초기화 전 주간보스를 확인해 주세요"
+NEW_ALTER = "새로운 공지가 올라왔습니다."
+
+
 player_records = {}
 
 intents = discord.Intents.default()
@@ -37,13 +49,17 @@ async def on_ready(): #봇 준비 명령어
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     await channel.send(f"Init! Bot is Started!")
     #await schedule_tasks()#스케줄 태스크 시작
-    bot.loop.create_task(schedule_tasks())
-    bot.loop.create_task(schedule_tasks2())
-    bot.loop.create_task(schedule_tasks3())
+    bot.loop.create_task(task_urs())
+    bot.loop.create_task(noticeTask())
+    bot.loop.create_task(task_daily_content())
+    bot.loop.create_task(task_weekly_content())
+    bot.loop.create_task(debugTask())
     #bot.loop.create_task(maple_task())
 
-#스케줄 시작
-async def schedule_tasks():
+#----------------------------------------
+#               우르스 알림
+#----------------------------------------
+async def task_urs():
     print("start")
     urs_start_time = datetime(now.year, now.month, now.day, URS_START_HOUR).astimezone(KST) #각종 변수 세팅
     urs_end_time = datetime(now.year, now.month, now.day, URS_END_HOUR).astimezone(KST)
@@ -73,7 +89,7 @@ async def urs_start_task(seconds_until_urs_start):
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     #time = datetime.datetime.now()
    # await channel.send(f"탸임스탬프 {time}")
-    await channel.send(f"우르스 2배 이벤트 시작했어! 메소 벌러 가야지~")
+    await channel.send(f"{URS_START}")
 
     await urs_end_task()
 
@@ -86,38 +102,13 @@ async def urs_end_task():#우르스 끝나는 데스크
     await asyncio.sleep(seconds_until_urs_end)
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
-    await channel.send(f"우르스 2배 이벤트 끝났어.. 다음을 기약하자!")
-
-
-async def schedule_tasks3():
-    guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
-    time = datetime.utcnow().astimezone(KST)
+    await channel.send(f"{URS_END}")
     
-    await channel.send("Task3 Timestamp")
-    await channel.send(f"타임스탬프 시작{time.strftime('%Y-%m-%d %X')}")
-    await timeStamp(3600)
-
-async def timeStamp(time):
-    await asyncio.sleep(time)
-    guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
-    t = datetime.utcnow().astimezone(KST)
-    await channel.send(f"디버깅 타임스탬프 {t.strftime('%Y-%m-%d %X')}")
-    await timeStamp(time)
-async def schedule_tasks2():
+#------------------------------------------------
+#                  공지 알림
+#------------------------------------------------
+async def noticeTask():
     bot.loop.create_task(maple_task())
-
-    guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
-    await channel.send("Task2 Notice")
-    next_urs_start_time = datetime(now.year, now.month, now.day, URS_START_HOUR).astimezone(KST)
-    if now > next_urs_start_time:
-        next_urs_start_time += timedelta(days=1)
-    time_until_urs_start = next_urs_start_time - now
-    seconds_until_urs_start = int(time_until_urs_start.total_seconds())
-
-    await urs_start_task(seconds_until_urs_start)
 
 async def maple_task(): #메이플 공지 알림
     await bot.wait_until_ready()
@@ -143,5 +134,77 @@ async def maple_task(): #메이플 공지 알림
             print(f"An error occurred while checking for notices: {str(e)}")
 
         await asyncio.sleep(60)  # 60초(1분)마다 체크
+
+#-------------------------------------
+#             일일컨텐츠
+#-------------------------------------
+async def task_daily_content():
+    start_time = datetime(now.year, now.month, now.day, RESET_ALTER_HOUR_CONTENT).astimezone(KST) #각종 변수 세팅
+    if now.hour >= RESET_ALTER_HOUR_CONTENT:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
+        start_time += timedelta(days=1)
+    
+    guild = bot.get_guild(GUILD_ID)
+    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    #time = datetime.datetime.now()
+   # await channel.send(f"탸임스탬프 {time}")
+    await channel.send(f"check : {CONTENT_RESET_DAILY}")
+        
+    time_until_start = start_time - now
+    
+    seconds_until_start = int(time_until_start.total_seconds())
+    await daily_start_task(seconds_until_start)
+
+async def daily_start_task(seconds_until_start):
+
+    await asyncio.sleep(seconds_until_start)
+    guild = bot.get_guild(GUILD_ID)
+    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    #time = datetime.datetime.now()
+   # await channel.send(f"탸임스탬프 {time}")
+    await channel.send(f"{CONTENT_RESET_DAILY}")
+
+    
+#-------------------------------------
+#             주간보스
+#-------------------------------------
+async def task_weekly_content():
+    start_time = datetime(now.year, now.month, now.day, RESET_ALTER_HOUR_BOSS).astimezone(KST) #각종 변수 세팅
+    if now.hour >= RESET_ALTER_HOUR_BOSS:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
+        start_time += timedelta(days=1)
+        
+    time_until_start = start_time - now
+    
+    seconds_until_start = int(time_until_start.total_seconds())
+    await weekly_start_task(seconds_until_start)
+
+async def weekly_start_task(seconds_until_start):
+    await asyncio.sleep(seconds_until_start)
+    guild = bot.get_guild(GUILD_ID)
+    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    #time = datetime.datetime.now()
+   # await channel.send(f"탸임스탬프 {time}")
+    if now.weekday() == 3: #weekday기준 수요일
+        await channel.send(f"{BOSS_RESET}")
+
+#--------------------------------------
+#             디버거
+#--------------------------------------
+async def debugTask():
+    guild = bot.get_guild(GUILD_ID)
+    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    time = datetime.utcnow().astimezone(KST)
+    
+    await channel.send("Task3 Timestamp")
+    await channel.send(f"타임스탬프 시작{time.strftime('%Y-%m-%d %X')}")
+    await timeStamp(3600)
+
+async def timeStamp(time):
+    await asyncio.sleep(time)
+    guild = bot.get_guild(GUILD_ID)
+    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    t = datetime.utcnow().astimezone(KST)
+    await channel.send(f"디버깅 타임스탬프 {t.strftime('%Y-%m-%d %X')}")
+    await timeStamp(time)
+
 
 bot.run(TOKEN)
