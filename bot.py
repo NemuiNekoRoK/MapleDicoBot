@@ -131,8 +131,6 @@ async def maple_task(): #메이플 공지 알림
                 href = latest_notice.a.attrs['href']
                 notice_link = f"{MAPLE_URL}{href}"
 
-                message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
-                
                 embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
                 embed.set_thumbnail(url = f"{notice_link}")
                 await channel.send(embed=embed)
