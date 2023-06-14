@@ -19,7 +19,6 @@ RESET_ALTER_HOUR_CONTENT = 14
 RESET_ALTER_HOUR_BOSS = 11
 EMBED_ICON_URL = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F99718D3359C47D6233"
 
-LAST_NOTICE = None
 
 #알림텍스트 
 URS_START = "우르스 2배 이벤트 시작"
@@ -118,9 +117,7 @@ async def maple_task(): #메이플 공지 알림
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     await channel.send(f"공지체크")
     
-    
-    
-    
+    last_noti = None
     while not bot.is_closed():
         try:
             response = requests.get(MAPLESTORY_URL)           
@@ -131,8 +128,8 @@ async def maple_task(): #메이플 공지 알림
             notices = noticeBanner.select('li')
             if notices:
                 latest_notice = notices[0]
-                if LAST_NOTICE != latest_notice:
-                    LAST_NOTICE = latest_notice        
+                if last_noti != latest_notice:
+                    last_noti = latest_notice        
                     notice_title = latest_notice.span.text
                     href = latest_notice.a.attrs['href']
                     notice_link = f"{MAPLE_URL}{href}"
