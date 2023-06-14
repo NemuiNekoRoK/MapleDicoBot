@@ -12,6 +12,7 @@ TOKEN = open("Token", "r").readline()
 GUILD_ID = 1115695314955931679
 CHANNEL_ID = "notice"
 MAPLESTORY_URL = "https://maplestory.nexon.com/News/Notice"
+MAPLE_URL = "https://maplestory.nexon.com"
 URS_START_HOUR = 4 #utc 기준
 URS_END_HOUR = 13
 RESET_ALTER_HOUR_CONTENT = 14
@@ -258,7 +259,8 @@ async def 공지테스트(ctx):
 
         latest_notice = notices[0]
         notice_title = latest_notice.span.text
-        notice_link = latest_notice.a['herf']
+        href = latest_notice.attrs['href']
+        notice_link = f"{MAPLE_URL}{href}"
 
         message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
         await channel.send(message)
