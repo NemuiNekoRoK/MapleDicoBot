@@ -17,7 +17,7 @@ URS_START_HOUR = 4 #utc 기준
 URS_END_HOUR = 13
 RESET_ALTER_HOUR_CONTENT = 14
 RESET_ALTER_HOUR_BOSS = 11
-EMBED_ICON_URL = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F99718D3359C47D6233"
+EMBED_ICON_URL = "https://i.ibb.co/rkbwLMh/image.jpg"
 
 #알림텍스트 
 URS_START = "우르스 2배 이벤트 시작"
@@ -133,7 +133,7 @@ async def maple_task(): #메이플 공지 알림
                 notice_link = f"{MAPLE_URL}{href}"
 
                 embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
-                embed.set_thumbnail(url = f"{EMBED_ICON_URL}")
+                embed.set_thumbnail(url = f"EMBED_ICON_URL")
                 await channel.send(embed=embed)
         except Exception as e:
             print(f"An error occurred while checking for notices: {str(e)}")
