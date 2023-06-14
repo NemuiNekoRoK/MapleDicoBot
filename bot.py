@@ -17,7 +17,7 @@ URS_START_HOUR = 4 #utc 기준
 URS_END_HOUR = 13
 RESET_ALTER_HOUR_CONTENT = 14
 RESET_ALTER_HOUR_BOSS = 11
-EMBED_ICON_URL = "https://i.ibb.co/rkbwLMh/image.jpg"
+EMBED_ICON_URL = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F99718D3359C47D6233"
 
 LAST_NOTICE = None
 
