@@ -132,7 +132,10 @@ async def maple_task(): #메이플 공지 알림
                 notice_link = f"{MAPLE_URL}{href}"
 
                 message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
-                await channel.send(message)
+                
+                embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
+                embed.set_thumbnail(url = f"{notice_link}")
+                await channel.send(embed=embed)
         except Exception as e:
             print(f"An error occurred while checking for notices: {str(e)}")
 
