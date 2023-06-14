@@ -253,7 +253,8 @@ async def 공지테스트(ctx):
         response.encoding ='utf-8'
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
-        notices = soup.select('li')
+        noticeBanner = soup.find('div', {'class' : 'news_board'})
+        notices = noticeBanner.select('li')
 
         latest_notice = notices[0]
         notice_title = latest_notice.text
