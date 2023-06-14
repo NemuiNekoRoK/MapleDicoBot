@@ -139,7 +139,8 @@ async def maple_task(): #메이플 공지 알림
                     await channel.send(embed=embed)
                     
                 else :
-                    await channel.send("신규공지 없음")
+                    a = None#dummy
+                    #await channel.send("신규공지 없음")
         except Exception as e:
             print(f"An error occurred while checking for notices: {str(e)}")
 
@@ -204,7 +205,7 @@ async def debugTask():
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     time = datetime.utcnow().astimezone(KST)
     
-    await channel.send("Task3 Timestamp")
+    #await channel.send("Task3 Timestamp")
     await channel.send(f"타임스탬프 시작{time.strftime('%Y-%m-%d %X')}")
     await timeStamp(3600)
 
