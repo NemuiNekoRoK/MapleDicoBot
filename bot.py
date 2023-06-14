@@ -19,6 +19,8 @@ RESET_ALTER_HOUR_CONTENT = 14
 RESET_ALTER_HOUR_BOSS = 11
 EMBED_ICON_URL = "https://i.ibb.co/rkbwLMh/image.jpg"
 
+LAST_NOTICE = None
+
 #알림텍스트 
 URS_START = "우르스 2배 이벤트 시작"
 URS_END = "우르스 2배이벤트 종료"
@@ -26,7 +28,6 @@ CONTENT_RESET_DAILY = "오후 11시입니다. 일일컨텐츠를 확인해 주�
 CONTENT_RESET_WEEKLY = "일요일 오후 11시입니다. 주간 컨텐츠를 확인해 주세요"
 BOSS_RESET = "수요일 오후 8시입니다. 초기화 전 주간보스를 확인해 주세요"
 NEW_ALTER = "새로운 공지가 올라왔습니다."
-
 
 player_records = {}
 
@@ -111,6 +112,8 @@ async def noticeTask():
 async def maple_task(): #메이플 공지 알림
     await bot.wait_until_ready()
 
+    
+
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     await channel.send(f"공지체크")
@@ -128,13 +131,17 @@ async def maple_task(): #메이플 공지 알림
             notices = noticeBanner.select('li')
             if notices:
                 latest_notice = notices[0]
-                notice_title = latest_notice.span.text
-                href = latest_notice.a.attrs['href']
-                notice_link = f"{MAPLE_URL}{href}"
+                if LAST_NOTICE != notice_title:          
+                    notice_title = latest_notice.span.text
+                    href = latest_notice.a.attrs['href']
+                    notice_link = f"{MAPLE_URL}{href}"
 
-                embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
-                embed.set_thumbnail(url = f"EMBED_ICON_URL")
-                await channel.send(embed=embed)
+                    embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
+                    embed.set_thumbnail(url = f"EMBED_ICON_URL")
+                    await channel.send(embed=embed)
+                    
+                else :
+                    await channel.send("신규공지 없음")
         except Exception as e:
             print(f"An error occurred while checking for notices: {str(e)}")
 
