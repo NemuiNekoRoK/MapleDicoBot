@@ -131,7 +131,7 @@ async def maple_task(): #메이플 공지 알림
             notices = noticeBanner.select('li')
             if notices:
                 latest_notice = notices[0]
-                if LAST_NOTICE != notice_title:          
+                if LAST_NOTICE != latest_notice:          
                     notice_title = latest_notice.span.text
                     href = latest_notice.a.attrs['href']
                     notice_link = f"{MAPLE_URL}{href}"
