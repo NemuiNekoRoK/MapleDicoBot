@@ -113,17 +113,23 @@ async def maple_task(): #메이플 공지 알림
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     await channel.send(f"공지체크")
+    
+    
+    
+    
     while not bot.is_closed():
         try:
-            response = requests.get(MAPLESTORY_URL)
+            response = requests.get(MAPLESTORY_URL)           
             response.encoding ='utf-8'
             html = response.text
             soup = BeautifulSoup(html, "html.parser")
-            notices = soup.select("tr")
+            noticeBanner = soup.find('div', {'class' : 'news_board'})
+            notices = noticeBanner.select('li')
             if notices:
                 latest_notice = notices[0]
-                notice_title = latest_notice.text
-                notice_link = latest_notice.get("href")
+                notice_title = latest_notice.span.text
+                href = latest_notice.a.attrs['href']
+                notice_link = f"{MAPLE_URL}{href}"
 
                 message = f"새로운 공지가 올라왔어!\n{notice_title}\n{notice_link}"
                 await channel.send(message)
