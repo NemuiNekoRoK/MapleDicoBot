@@ -42,7 +42,7 @@ now = datetime.utcnow().astimezone(KST)
 
 @bot.event
 async def on_ready(): #봇 준비 명령어
-    print(f"{TOKEN}")
+    print(f"토큰체크{TOKEN}")
     print(f"Logged in as {bot.user.name}")
     await bot.change_presence(activity=discord.Game("~도움말로 명령어를 알려드려요!"), status=discord.Status.dnd)
     guild = bot.get_guild(GUILD_ID)
