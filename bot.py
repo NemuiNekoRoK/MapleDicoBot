@@ -244,7 +244,7 @@ async def 우르스(ctx):
 #--------------------------------------
 #             mvp
 #--------------------------------------
-@bot.command(aliases=['ㅇㅂㅍ', 'mvp', 'MVP', 'Mvp', 'dqv']) #MVP작 명령어
+@bot.command(aliases=['ㅇㅂㅍ', 'dqv']) #MVP작 명령어
 async def mvp효율(ctx):
     await ctx.send("물통 한 병에 얼마인가요? 예시 : 2000")
     response = await bot.wait_for("message")
