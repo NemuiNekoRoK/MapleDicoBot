@@ -253,7 +253,7 @@ async def 공지테스트(ctx):
         response.encoding ='utf-8'
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
-        notices = soup.select('tr')
+        notices = soup.select('li')
 
         latest_notice = notices[0]
         notice_title = latest_notice.text
