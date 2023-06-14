@@ -139,8 +139,8 @@ async def task_daily_content():
     if now.hour >= RESET_ALTER_HOUR_CONTENT:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
         start_time += timedelta(days=1)
     
-    guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    #guild = bot.get_guild(GUILD_ID)
+    #channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     #time = datetime.datetime.now()
    # await channel.send(f"탸임스탬프 {time}")
     #await channel.send(f"check : {CONTENT_RESET_DAILY}")
