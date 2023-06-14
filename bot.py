@@ -143,7 +143,7 @@ async def task_daily_content():
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     #time = datetime.datetime.now()
    # await channel.send(f"탸임스탬프 {time}")
-    await channel.send(f"check : {CONTENT_RESET_DAILY}")
+    #await channel.send(f"check : {CONTENT_RESET_DAILY}")
         
     time_until_start = start_time - now
     
