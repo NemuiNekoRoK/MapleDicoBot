@@ -70,8 +70,8 @@ async def task_urs():
     
     seconds_until_urs_start = int(time_until_urs_start.total_seconds())
 
-    guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    #guild = bot.get_guild(GUILD_ID)
+    #channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     #time = datetime.datetime.now()
 
     await urs_start_task(seconds_until_urs_start)
@@ -187,7 +187,7 @@ async def weekly_start_task(seconds_until_start):
 #--------------------------------------
 async def debugTask():
     guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    channel = discord.utils.get(guild.ch핑nnels, name=CHANNEL_ID)
     time = datetime.utcnow().astimezone(KST)
     
     await channel.send("Task3 Timestamp")
@@ -202,5 +202,209 @@ async def timeStamp(time):
     await channel.send(f"디버깅 타임스탬프 {t.strftime('%Y-%m-%d %X')}")
     await timeStamp(time)
 
+#--------------------------------------
+#             핑
+#--------------------------------------
+@bot.command() #test for Discord bot is online
+async def 핑(ctx):
+    await ctx.send("퐁!")
+
+#--------------------------------------
+#             도움말
+#--------------------------------------    
+@bot.command(aliases=['h']) #도움말 명령어
+async def 도움말(ctx):
+    help_message = "~우르스(ㅇㄽ,ㅇㄹㅅ) : 우르스 2배 이벤트 시작시간 또는 남은 시간을 알려줍니다. \n ~MVP효율(ㅇㅂㅍ) : MVP작 효율 계산기를 불러옵니다. \n ~재획(ㅈㅎ) : 재획 타이머를 시작합니다. \n ~보스분배(ㅂㅂㄱ) : 보스 수익금 분배 계산합니다."
+    await ctx.send(help_message)
+
+
+#--------------------------------------
+#             우르스 커맨드
+#--------------------------------------
+@bot.command(aliases=['ㅇㄽ','ㅇㄹㅅ']) #우르스 명령어
+async def 우르스(ctx):
+    current_time = datetime.datetime.now()
+    urs_start_time = datetime.datetime(current_time.year, current_time.month, current_time.day, URS_START_HOUR)
+    time_until_urs_start = urs_start_time - current_time
+    #seconds_until_urs_start = int(time_until_urs_start.total_seconds())
+
+    if current_time.hour < URS_START_HOUR:
+        hours, remainder = divmod(time_until_urs_start.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        await ctx.send(f"우르스 2배 아직 시작 안했어! {URS_START_HOUR} 시에 시작합니다. → {hours}시간 {minutes}분 {seconds}초")
+    elif current_time.hour >= URS_END_HOUR:
+        await ctx.send("우르스 2배 이미 끝났습니다.")
+    else:
+        urs_end_time = datetime.datetime(current_time.year, current_time.month, current_time.day, URS_END_HOUR)
+        time_until_urs_end = urs_end_time - current_time
+        hours, remainder = divmod(time_until_urs_end.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        await ctx.send(f"우르스 2배 진행 중 입니다.. → {hours}시간 {minutes}분 {seconds}초")
+
+#--------------------------------------
+#             mvp
+#--------------------------------------
+@bot.command(aliases=['ㅇㅂㅍ']) #MVP작 명령어
+async def mvp효율(ctx):
+    await ctx.send("물통 한 병에 얼마인가요? 예시 : 2000")
+    response = await bot.wait_for("message")
+    MT = int(response.content)
+    def calculate_efficiency(Bcp, Rcp, Gcp, ry, Trcp=None, Tbcp=None, Tgcp=None):
+        
+        bcc = 18150
+        rcc = 9900
+        gcc = 19800
+        rsc = 22000
+        trcc = 27000
+        tbcc = 49500
+        tgcc = 54000
+
+        b = Bcp * (20 / 19) * 100 / (bcc * 100000000 / MT)
+        r = Rcp * (20 / 19) * 100 / (rcc * 100000000 / MT) 
+        g = Gcp * (20 / 19) * 100 / (gcc * 100000000 / MT) 
+        rs = ry * (20 / 19) * 100 / (rsc * 100000000 / MT) 
+        
+        efficiency = {
+            "블랙큐브": b,
+            "레드큐브": r,
+            "에디셔널큐브": g,
+            "로얄스타일": rs,
+        }
+
+        if Trcp is not None and Tbcp is not None and Tgcp is not None:
+            tr = Trcp * (20 / 19) * 100 / (trcc * 100000000 / MT)
+            tb = Tbcp * (20 / 19) * 100 / (tbcc * 100000000 / MT) 
+            tg = Tgcp * (20 / 19) * 100 / (tgcc * 100000000 / MT) 
+            
+            efficiency["명절 레드큐브 팩"] = tr
+            efficiency["명절 블랙큐브 팩"] = tb
+            efficiency["명절 에디큐브 팩"] = tg
+
+        max_item = max(efficiency, key=efficiency.get)
+        max_efficiency = efficiency[max_item]
+
+        return max_item, max_efficiency
+
+    await ctx.send("명절 큐브팩 있나요? (Y,N)")
+    response = await bot.wait_for("message")
+    nycp = response.content
+
+    if nycp.lower() == "y":
+        await ctx.send("경매장 블랙큐브 최저가격 (11개) 예시 : 100000000")
+        response = await bot.wait_for("message")
+        Bcp = int(response.content)
+
+        await ctx.send("경매장 레드큐브 최저가격 (11개) 예시 : 100000000")
+        response = await bot.wait_for("message")
+        Rcp = int(response.content)
+
+        await ctx.send("경매장 에디큐브 최저가격 (11개) 예시 : 100000000")
+        response = await bot.wait_for("message")
+        Gcp = int(response.content)
+
+        await ctx.send("경매장 로얄스타일 최저가격 (10개, 팔지 않을 경우 0 입력 해주세요!) 예시 : 100000000")
+        response = await bot.wait_for("message")
+        ry = int(response.content)
+
+        await ctx.send("경매장 명절 레드큐브팩 최저가격 (30개, 에픽 잠재 100% 가격 포함!) 예시 : 100000000")
+        response = await bot.wait_for("message")
+        Trcp = int(response.content)
+
+        await ctx.send("경매장 명절 블랙큐브팩 최저가격 (30개, 유니크 잠재 30% 가격 포함!) 예시 : 100000000 ")
+        response = await bot.wait_for("message")
+        Tbcp = int(response.content)
+
+        await ctx.send("경매장 명절 에디큐브팩 최저가격 (30개, 에디 에픽 잠재 30% 가격 포함!) 예시 : 100000000 ")
+        response = await bot.wait_for("message")
+        Tgcp = int(response.content)
+
+        max_item, max_efficiency = calculate_efficiency(Bcp, Rcp, Gcp, ry, Trcp, Tbcp, Tgcp)
+
+        await ctx.send(f"{max_item}의 효율이 {max_efficiency:.2f}% 로, 가장 높습니다.!")
+        await ctx.send("단, 효율도 x라 하면, X < 100% 일 경우 완전 회수 불가")
+        await ctx.send("X = 100% 일 경우 회수 가능")
+        await ctx.send("X > 100% 일 경우 회수 + @")
+    else :
+
+        await ctx.send("경매장 블랙큐브 최저가격(11개) 예시 : 100000000")
+        response = await bot.wait_for("message")
+        Bcp = int(response.content)
+
+        await ctx.send("경매장 레드큐브 최저가격(11개) 예시 : 100000000")
+        response = await bot.wait_for("message")
+        Rcp = int(response.content)
+
+        await ctx.send("경매장 에디큐브 최저가격(11개) 예시 : 100000000")
+        response = await bot.wait_for("message")
+        Gcp = int(response.content)
+
+        await ctx.send("경매장 로얄스타일 최저가격(10개, 팔지 않을 경우 0 입력) 예시 : 100000000")
+        response = await bot.wait_for("message")
+        ry = int(response.content)
+
+        max_item, max_efficiency = calculate_efficiency(Bcp, Rcp, Gcp, ry)
+
+        await ctx.send(f"{max_item}의 효율이 {max_efficiency:.2f}% 로, 가장 높습니다.")
+        await ctx.send("효율도 x라 하면, X < 100% 일 경우 완전 회수 불가")
+        await ctx.send("X = 100% 일 경우 회수 가능")
+        await ctx.send("X > 100% 일 경우 회수 + @")
+
+
+#--------------------------------------
+#             재획
+#--------------------------------------
+#재획 시작 명령어 처리하는 코드
+@bot.command(aliases=['ㅈㅎ'])
+async def 재획(ctx):
+    player_name = ctx.author
+
+    if player_name in player_records:
+        player_records[player_name] += 1
+    else :
+        player_records[player_name] = 1
+    await ctx.send(f"{player_name}님, 재획을 시작했습니다.")
+    #재획을 시작할때
+    for i in range(3):
+        await asyncio.sleep(1800) #경쿠 알림 30분마다 3번 전송하는 코드
+        await nec(player_name)
+        i #경고 개거슬려서 넣음
+    #재획이 끝날때
+    await asyncio.sleep(1800) #30분 대기
+    if player_name in player_records:
+        record = player_records[player_name]
+    else :
+        record = 0
+    await ctx.send(f"{player_name}님! 재획이 끝났습니다. 현재 재획비를 {record}번 마셨습니다.")
+    
+    #재획 알리미 (2시간짜리) > ~재획 @name 
+async def nec(player_name):
+    player = await bot.fetch_user(player_name)
+    if player:
+        await player.send(f"{player_name}님, 경험치 쿠폰(30분)이 끝났습니다.")
+
+#--------------------------------------
+#             노래
+#--------------------------------------
+@bot.command(aliases=['ㄴㄹ'])
+async def 개발자추천노래(ctx):
+    await ctx.send("https://www.youtube.com/watch?v=yK8HfzDlOD4")
+
+#--------------------------------------
+#             분배기
+#--------------------------------------
+@bot.command(aliases=['ㅂㅂㄱ'])
+async def 보스분배(ctx):
+    await ctx.send("분배 할 금액 (예시 : 244342444)")
+    charge_message = await bot.wait_for("message")
+    charge = float(charge_message.content)
+
+    await ctx.send("분배 받는 인원 (본인 포함, 최대 6명) 예시 : 6")
+    party_message = await bot.wait_for("message")
+    party = int(party_message.content)
+
+    calculate = charge / party
+
+    await ctx.send(f"{party}명이 분배 받을 금액은 {calculate:.1f} 메소입니다.")
+    #환산기 사이트 구현해보자
 
 bot.run(TOKEN)
