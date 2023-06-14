@@ -271,7 +271,7 @@ async def 공지테스트(ctx):
         notice_link = f"{MAPLE_URL}{href}"
 
         embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
-        embed.set_thumbnail(url = f"{EMBED_ICON_URL}")
+        embed.set_thumbnail(url = EMBED_ICON_URL)
         await channel.send(embed=embed)
     except Exception as e:
         print(f"An error occurred while checking for notices: {str(e)}")
