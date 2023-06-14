@@ -221,7 +221,7 @@ async def 도움말(ctx):
 #--------------------------------------
 #             우르스 커맨드
 #--------------------------------------
-@bot.command(aliases=['ㅇㄽ','ㅇㄹㅅ']) #우르스 명령어
+@bot.command(aliases=['ㅇㄽ','ㅇㄹㅅ', 'dft', 'DFT', 'Dft']) #우르스 명령어
 async def 우르스(ctx):
     current_time = datetime.utcnow().astimezone(KST)
     urs_start_time = datetime(current_time.year, current_time.month, current_time.day, URS_START_HOUR).astimezone(KST)
@@ -244,7 +244,7 @@ async def 우르스(ctx):
 #--------------------------------------
 #             mvp
 #--------------------------------------
-@bot.command(aliases=['ㅇㅂㅍ']) #MVP작 명령어
+@bot.command(aliases=['ㅇㅂㅍ', 'mvp', 'MVP', 'Mvp', 'dqv']) #MVP작 명령어
 async def mvp효율(ctx):
     await ctx.send("물통 한 병에 얼마인가요? 예시 : 2000")
     response = await bot.wait_for("message")
@@ -354,7 +354,7 @@ async def mvp효율(ctx):
 #             재획
 #--------------------------------------
 #재획 시작 명령어 처리하는 코드
-@bot.command(aliases=['ㅈㅎ'])
+@bot.command(aliases=['ㅈㅎ', 'wg', 'WG', 'Wg'])
 async def 재획(ctx):
     player_name = ctx.author
 
@@ -385,14 +385,14 @@ async def nec(player_name):
 #--------------------------------------
 #             노래
 #--------------------------------------
-@bot.command(aliases=['ㄴㄹ'])
+@bot.command(aliases=['ㄴㄹ', 'song', 'sf', 'Sf', 'SF'])
 async def 개발자추천노래(ctx):
     await ctx.send("https://www.youtube.com/watch?v=yK8HfzDlOD4")
 
 #--------------------------------------
 #             분배기
 #--------------------------------------
-@bot.command(aliases=['ㅂㅂㄱ'])
+@bot.command(aliases=['ㅂㅂㄱ', 'qqr', 'QQR', 'Qqr'])
 async def 보스분배(ctx):
     await ctx.send("분배 할 금액 (예시 : 244342444)")
     charge_message = await bot.wait_for("message")
