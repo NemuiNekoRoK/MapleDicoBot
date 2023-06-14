@@ -187,7 +187,7 @@ async def weekly_start_task(seconds_until_start):
 #--------------------------------------
 async def debugTask():
     guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.ch핑nnels, name=CHANNEL_ID)
+    channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     time = datetime.utcnow().astimezone(KST)
     
     await channel.send("Task3 Timestamp")
