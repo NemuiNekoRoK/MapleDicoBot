@@ -23,7 +23,7 @@ EMBED_ICON_URL = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=
 #알림텍스트 
 URS_START = "우르스 2배 이벤트 시작"
 URS_END = "우르스 2배이벤트 종료"
-CONTENT_RESET_DAILY = "오후 11시입니다. 일일컨텐츠를 확인해 주세요\n1. 마일리지 적립\n2. 몬컬보상\n3. 기여도 보스\n4. 길드 출석\n5. 몬파\n6. 황금마차\n7. 일일퀘스트\n8. 이벤트퀘스트\n9.무릉포인트수령"
+CONTENT_RESET_DAILY = "오후 11시입니다. 일일컨텐츠를 확인해 주세요\n1. 마일리지 적립\n2. 몬컬보상\n3. 기여도 보스\n4. 길드 출석\n5. 몬파\n6. 황금마차\n7. 일일퀘스트\n8. 이벤트퀘스트\n9. 무릉포인트수령"
 CONTENT_RESET_WEEKLY = "일요일 오후 11시입니다. 주간 컨텐츠를 확인해 주세요"
 BOSS_RESET = "수요일 오후 8시입니다. 초기화 전 주간보스를 확인해 주세요"
 NEW_ALTER = "새로운 공지가 올라왔습니다."
@@ -49,7 +49,7 @@ async def on_ready(): #봇 준비 명령어
     await bot.change_presence(activity=discord.Game("~도움말로 명령어를 알려드려요!"), status=discord.Status.dnd)
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
-    await channel.send(f"Init! Bot is Started!")
+
     #await schedule_tasks()#스케줄 태스크 시작
     bot.loop.create_task(task_urs())
     bot.loop.create_task(noticeTask())
@@ -120,27 +120,33 @@ async def maple_task(): #메이플 공지 알림
     last_noti = None
     while not bot.is_closed():
         try:
-            response = requests.get(MAPLESTORY_URL)           
-            response.encoding ='utf-8'
-            html = response.text
-            soup = BeautifulSoup(html, "html.parser")
-            noticeBanner = soup.find('div', {'class' : 'news_board'})
-            notices = noticeBanner.select('li')
-            if notices:
-                latest_notice = notices[0]
-                if last_noti != latest_notice:
-                    last_noti = latest_notice        
-                    notice_title = latest_notice.span.text
-                    href = latest_notice.a.attrs['href']
-                    notice_link = f"{MAPLE_URL}{href}"
+            response = requests.get(MAPLESTORY_URL)
 
-                    embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
-                    embed.set_thumbnail(url = EMBED_ICON_URL)
-                    await channel.send(embed=embed)
-                    
-                else :
-                    a = None#dummy
-                    #await channel.send("신규공지 없음")
+            #예외처리. 링크 리다이렉션 체크
+            # 리다이렉션이 아닌경우
+            if response.url == MAPLE_URL:           
+                response.encoding ='utf-8'
+                html = response.text
+                soup = BeautifulSoup(html, "html.parser")
+                noticeBanner = soup.find('div', {'class' : 'news_board'})
+                notices = noticeBanner.select('li')
+                if notices:
+                    latest_notice = notices[0]
+                    if last_noti != latest_notice:
+                        last_noti = latest_notice        
+                        notice_title = latest_notice.span.text
+                        href = latest_notice.a.attrs['href']
+                        notice_link = f"{MAPLE_URL}{href}"
+
+                        embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
+                        embed.set_thumbnail(url = EMBED_ICON_URL)
+                        await channel.send(embed=embed)
+                        
+                    else :
+                        print("업데이트된 공지 없음")
+
+            else :
+                print ("error! 링크가 리다이렉션됨!")
         except Exception as e:
             print(f"An error occurred while checking for notices: {str(e)}")
 
@@ -246,7 +252,7 @@ async def 우르스(ctx):
     if current_time.hour < URS_START_HOUR:
         hours, remainder = divmod(time_until_urs_start.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
-        await ctx.send(f"우르스 2배 아직 시작 안했어! {URS_START_HOUR} 시에 시작합니다. → {hours}시간 {minutes}분 {seconds}초")
+        await ctx.send(f"우르스 2배 아직 시작 안했어! 11 시에 시작합니다. → {hours}시간 {minutes}분 {seconds}초")
     elif current_time.hour >= URS_END_HOUR:
         await ctx.send("우르스 2배 이미 끝났습니다.")
     else:
@@ -264,21 +270,34 @@ async def 공지테스트(ctx):
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     await channel.send(f"공지체크")
     try:
-        response = requests.get(MAPLESTORY_URL)
-        response.encoding ='utf-8'
-        html = response.text
-        soup = BeautifulSoup(html, 'html.parser')
-        noticeBanner = soup.find('div', {'class' : 'news_board'})
-        notices = noticeBanner.select('li')
+            response = requests.get(MAPLESTORY_URL)
 
-        latest_notice = notices[0]
-        notice_title = latest_notice.span.text
-        href = latest_notice.a.attrs['href']
-        notice_link = f"{MAPLE_URL}{href}"
+            #예외처리. 링크 리다이렉션 체크
+            # 리다이렉션이 아닌경우
+            if response.url == MAPLE_URL:           
+                response.encoding ='utf-8'
+                html = response.text
+                soup = BeautifulSoup(html, "html.parser")
+                noticeBanner = soup.find('div', {'class' : 'news_board'})
+                notices = noticeBanner.select('li')
+                if notices:
+                    latest_notice = notices[0]
+                    if last_noti != latest_notice:
+                        last_noti = latest_notice        
+                        notice_title = latest_notice.span.text
+                        href = latest_notice.a.attrs['href']
+                        notice_link = f"{MAPLE_URL}{href}"
 
-        embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
-        embed.set_thumbnail(url = {EMBED_ICON_URL})
-        await channel.send(embed=embed)
+                        embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
+                        embed.set_thumbnail(url = EMBED_ICON_URL)
+                        await channel.send(embed=embed)
+                        
+                    else :
+                        await channel.send(f"업데이트된 공지가 없습니다.")
+
+            else :
+                await channel.send(f"홈페이지가 점검중입니다.")
+
     except Exception as e:
         print(f"An error occurred while checking for notices: {str(e)}")
 
