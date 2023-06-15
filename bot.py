@@ -14,6 +14,7 @@ CHANNEL_ID = "notice"
 MAPLESTORY_URL = "https://maplestory.nexon.com/News/Notice"
 MAPLE_URL = "https://maplestory.nexon.com"
 URS_START_HOUR = 4 #utc 기준
+URS_START_HOUR_KST = 13
 URS_END_HOUR = 13
 RESET_ALTER_HOUR_CONTENT = 14
 RESET_ALTER_HOUR_BOSS = 11
@@ -245,7 +246,7 @@ async def 우르스(ctx):
     time_until_urs_start = urs_start_time - current_time
     seconds_until_urs_start = int(time_until_urs_start.total_seconds())
 
-    if current_time.hour < URS_START_HOUR:
+    if current_time.hour < URS_START_HOUR_KST: #utc날짜차이 예외처리
         hours, remainder = divmod(time_until_urs_start.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         await ctx.send(f"우르스 2배 아직 시작 안했어! 11 시에 시작합니다. → {hours}시간 {minutes}분 {seconds}초")
