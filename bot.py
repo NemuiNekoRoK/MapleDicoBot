@@ -273,7 +273,7 @@ async def 공지테스트(ctx):
 
             #예외처리. 링크 리다이렉션 체크
             # 리다이렉션이 아닌경우
-            if response.url == MAPLE_URL:           
+            if response.url == MAPLESTORY_URL:           
                 response.encoding ='utf-8'
                 html = response.text
                 soup = BeautifulSoup(html, "html.parser")
