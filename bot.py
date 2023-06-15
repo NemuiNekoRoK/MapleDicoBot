@@ -51,7 +51,7 @@ async def on_ready(): #봇 준비 명령어
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
 
-     await channel.send(f"반갑습니다. 메이플스토리 알림봇입니다")
+    await channel.send(f"반갑습니다. 메이플스토리 알림봇입니다")
 
     #await schedule_tasks()#스케줄 태스크 시작
     bot.loop.create_task(task_urs())
