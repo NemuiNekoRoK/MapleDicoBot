@@ -51,6 +51,8 @@ async def on_ready(): #봇 준비 명령어
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
 
+     await channel.send(f"반갑습니다. 메이플스토리 알림봇입니다")
+
     #await schedule_tasks()#스케줄 태스크 시작
     bot.loop.create_task(task_urs())
     bot.loop.create_task(noticeTask())
@@ -249,7 +251,7 @@ async def 우르스(ctx):
     if current_time.hour < URS_START_HOUR_KST: #utc날짜차이 예외처리
         hours, remainder = divmod(time_until_urs_start.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
-        await ctx.send(f"우르스 2배 아직 시작 안했어! 11 시에 시작합니다. → {hours}시간 {minutes}분 {seconds}초")
+        await ctx.send(f"우르스 2배 아직 시작 안했어! {URS_START_HOUR_KST} 시에 시작합니다. → {hours}시간 {minutes}분 {seconds}초")
     elif current_time.hour >= URS_END_HOUR:
         await ctx.send("우르스 2배 이미 끝났습니다.")
     else:
