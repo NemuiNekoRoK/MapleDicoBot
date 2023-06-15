@@ -110,12 +110,8 @@ async def noticeTask():
 
 async def maple_task(): #메이플 공지 알림
     await bot.wait_until_ready()
-
-    
-
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
-    await channel.send(f"공지체크")
     
     last_noti = None
     while not bot.is_closed():
@@ -256,7 +252,7 @@ async def 우르스(ctx):
     elif current_time.hour >= URS_END_HOUR:
         await ctx.send("우르스 2배 이미 끝났습니다.")
     else:
-        urs_end_time = datetime(current_time.year, current_time.month, current_time.day, URS_END_HOUR)
+        urs_end_time = datetime(current_time.year, current_time.month, current_time.day, URS_END_HOUR).astimezone(KST)
         time_until_urs_end = urs_end_time - current_time
         hours, remainder = divmod(time_until_urs_end.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
