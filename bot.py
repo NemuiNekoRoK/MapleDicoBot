@@ -11,16 +11,23 @@ import asyncio
 TOKEN = open("Token", "r").readline()
 GUILD_ID = 1115695314955931679
 CHANNEL_ID = "notice"
-MAPLESTORY_URL = "https://maplestory.nexon.com/News/Notice"
-MAPLE_URL = "https://maplestory.nexon.com"
-URS_START_HOUR = 4 #utc 기준
-URS_START_HOUR_KST = 13
+
+#로컬라이즈 이전 utc 기준시간 상수
+URS_START_HOUR = 4
 URS_END_HOUR = 13
-URS_END_HOUR_KST = 22
 RESET_ALTER_HOUR_CONTENT = 14
 RESET_ALTER_HOUR_BOSS = 11
-EMBED_ICON_URL = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F99718D3359C47D6233"
 
+#로컬라이즈 후 비교용 kst 기준시간 상수
+URS_START_HOUR_KST = 13
+URS_END_HOUR_KST = 22
+RESET_ALTER_HOUR_CONTENT_KST = 23
+RESET_ALTER_HOUR_BOSS_KST = 20
+
+#URL
+EMBED_ICON_URL = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F99718D3359C47D6233"
+MAPLESTORY_URL = "https://maplestory.nexon.com/News/Notice"
+MAPLE_URL = "https://maplestory.nexon.com"
 
 #알림텍스트 
 URS_START = "우르스 2배 이벤트 시작"
@@ -69,7 +76,7 @@ async def task_urs():
     print("start")
     urs_start_time = datetime(now.year, now.month, now.day, URS_START_HOUR).astimezone(KST) #각종 변수 세팅
     urs_end_time = datetime(now.year, now.month, now.day, URS_END_HOUR).astimezone(KST)
-    if now.hour >= URS_END_HOUR:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
+    if now.hour >= URS_END_HOUR_KST:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정. 위에서 로컬라이즈가 되었기 때문에, 로컬기준 시간으로 변경
         urs_start_time += timedelta(days=1)
         urs_end_time += timedelta(days=1)
     time_until_urs_start = urs_start_time - now
@@ -109,6 +116,7 @@ async def urs_end_task():#우르스 끝나는 데스크
 #------------------------------------------------
 #                  공지 알림
 #------------------------------------------------
+# 정상작동 pass
 async def noticeTask():
     bot.loop.create_task(maple_task())
 
@@ -157,7 +165,7 @@ async def maple_task(): #메이플 공지 알림
 #-------------------------------------
 async def task_daily_content():
     start_time = datetime(now.year, now.month, now.day, RESET_ALTER_HOUR_CONTENT).astimezone(KST) #각종 변수 세팅
-    if now.hour >= RESET_ALTER_HOUR_CONTENT:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
+    if now.hour >= RESET_ALTER_HOUR_CONTENT_KST:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
         start_time += timedelta(days=1)
     
     #guild = bot.get_guild(GUILD_ID)
@@ -186,7 +194,7 @@ async def daily_start_task(seconds_until_start):
 #-------------------------------------
 async def task_weekly_content():
     start_time = datetime(now.year, now.month, now.day, RESET_ALTER_HOUR_BOSS).astimezone(KST) #각종 변수 세팅
-    if now.hour >= RESET_ALTER_HOUR_BOSS:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
+    if now.hour >= RESET_ALTER_HOUR_BOSS_KST:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
         start_time += timedelta(days=1)
         
     time_until_start = start_time - now
