@@ -69,6 +69,7 @@ async def on_ready(): #봇 준비 명령어
     bot.loop.create_task(noticeTask())
     bot.loop.create_task(task_daily_content())
     bot.loop.create_task(task_weekly_content())
+    bot.loop.create_task(task_guild_content())
     #bot.loop.create_task(debugTask())
     #bot.loop.create_task(maple_task())
 
@@ -87,7 +88,7 @@ async def urs_start_task(start_time):
     while True:
         now = datetime.utcnow().astimezone(KST)
         
-        if now.time() >= start_time:
+        if now.datetime >= start_time:
             guild = bot.get_guild(GUILD_ID)
             channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
             await channel.send(f"{URS_START}")
@@ -114,7 +115,7 @@ async def urs_end_task(start_time):
     while True:
         now = datetime.utcnow().astimezone(KST)
 
-        if now.time() >= start_time:
+        if now.datetime() >= start_time:
             guild = bot.get_guild(GUILD_ID)
             channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
             await channel.send(f"{URS_END}")
@@ -187,7 +188,7 @@ async def daily_start_task(start_time):
     while True:
         now = datetime.utcnow().astimezone(KST)
 
-        if now.time() >= start_time:
+        if now.datetime() >= start_time:
             guild = bot.get_guild(GUILD_ID)
             channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
             await channel.send(f"{CONTENT_RESET_DAILY}")
@@ -216,7 +217,7 @@ async def weekly_start_task(start_time):
     while True:
         now = datetime.utcnow().astimezone(KST)
 
-        if now.time() >= start_time:
+        if now.datetime() >= start_time:
             if now.weekday() == 3: #weekday기준 수요일
                 guild = bot.get_guild(GUILD_ID)
                 channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
@@ -230,7 +231,7 @@ async def weekly_start_task(start_time):
         print("weekly check")
         
 #-------------------------------------
-#             주간보스
+#             길컨
 #-------------------------------------
 async def task_guild_content():
     print("start")
@@ -244,8 +245,8 @@ async def guild_start_task(start_time):
     while True:
         now = datetime.utcnow().astimezone(KST)
 
-        if now.time() >= start_time:
-            if now.weekday() == 3: #weekday기준 수요일
+        if now.datetime() >= start_time:
+            if now.weekday() == 7: #weekday기준 수요일
                 guild = bot.get_guild(GUILD_ID)
                 channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
                 await channel.send(f"{GUILD_CONTENT_ALTER}")
