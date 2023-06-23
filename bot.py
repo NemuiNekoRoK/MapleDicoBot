@@ -246,7 +246,7 @@ async def guild_start_task(start_time):
         now = datetime.utcnow().astimezone(KST)
 
         if now >= start_time:
-            if now.weekday() == 7: #weekday기준 수요일
+            if now.weekday() == 6 or now.weekday() == 7: #weekday기준 토, 일요일
                 guild = bot.get_guild(GUILD_ID)
                 channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
                 await channel.send(f"{GUILD_CONTENT_ALTER}")
