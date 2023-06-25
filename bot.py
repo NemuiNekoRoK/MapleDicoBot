@@ -46,6 +46,9 @@ intents.typing = False
 intents.presences = False
 intents.messages = True
 intents.message_content = True  # message_content intent 추가
+
+last_noti = None
+
 bot = commands.Bot(command_prefix="~", intents=intents, case_insensitive=True)
 
 #현재시간
@@ -93,10 +96,10 @@ async def urs_start_task(start_time):
             channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
             await channel.send(f"{URS_START}")
         
-            tomorrow = now + timedelta(days=1)
-            targetTime = datetime.combine(tomorrow.date(), start_time)
-            delta = targetTime - datetime.utcnow().astimezone(KST)
-            await asyncio.sleep(delta.seconds)
+            now = now + timedelta(days=1)
+            #targetTime = datetime.combine(tomorrow.date(), start_time)
+            #delta = targetTime - datetime.utcnow().astimezone(KST)
+            #await asyncio.sleep(delta.seconds)
 
         await asyncio.sleep(60)
         print("urs start check")
@@ -120,10 +123,10 @@ async def urs_end_task(start_time):
             channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
             await channel.send(f"{URS_END}")
         
-            tomorrow = now + timedelta(days=1)
-            targetTime = datetime.combine(tomorrow.date(), start_time)
-            delta = targetTime - datetime.utcnow().astimezone(KST)
-            await asyncio.sleep(delta.seconds)
+            now = now + timedelta(days=1)
+            #targetTime = datetime.combine(tomorrow.date(), start_time)
+            #delta = targetTime - datetime.utcnow().astimezone(KST)
+            #await asyncio.sleep(delta.seconds)
         await asyncio.sleep(60)
         print("urs end check")
 #------------------------------------------------
@@ -138,7 +141,6 @@ async def maple_task(): #메이플 공지 알림
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     
-    last_noti = None
     while not bot.is_closed():
         try:
             response = requests.get(MAPLESTORY_URL)
@@ -193,10 +195,10 @@ async def daily_start_task(start_time):
             channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
             await channel.send(f"{CONTENT_RESET_DAILY}")
         
-            tomorrow = now + timedelta(days=1)
-            targetTime = datetime.combine(tomorrow.date(), start_time)
-            delta = targetTime - datetime.utcnow().astimezone(KST)
-            await asyncio.sleep(delta.seconds)
+            now = now + timedelta(days=1)
+            #targetTime = datetime.combine(tomorrow.date(), start_time)
+            #delta = targetTime - datetime.utcnow().astimezone(KST)
+            #await asyncio.sleep(delta.seconds)
         await asyncio.sleep(60)
         print("daily check")
 
@@ -223,10 +225,10 @@ async def weekly_start_task(start_time):
                 channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
                 await channel.send(f"{BOSS_RESET}")
                 
-            tomorrow = now + timedelta(days=1)
-            targetTime = datetime.combine(tomorrow.date(), start_time)
-            delta = targetTime - datetime.utcnow().astimezone(KST)
-            await asyncio.sleep(delta.seconds)
+            now = now + timedelta(days=1)
+            #targetTime = datetime.combine(tomorrow.date(), start_time)
+            #delta = targetTime - datetime.utcnow().astimezone(KST)
+            #await asyncio.sleep(delta.seconds)
         await asyncio.sleep(60)
         print("weekly check")
         
@@ -251,10 +253,10 @@ async def guild_start_task(start_time):
                 channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
                 await channel.send(f"{GUILD_CONTENT_ALTER}")
                 
-            tomorrow = now + timedelta(days=1)
-            targetTime = datetime.combine(tomorrow.date(), start_time)
-            delta = targetTime - datetime.utcnow().astimezone(KST)
-            await asyncio.sleep(delta.seconds)
+            now = now + timedelta(days=1)
+            #targetTime = datetime.combine(tomorrow.date(), start_time)
+            #delta = targetTime - datetime.utcnow().astimezone(KST)
+            #await asyncio.sleep(delta.seconds)
         await asyncio.sleep(60)
         print("guild check")        
         
