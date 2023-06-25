@@ -140,6 +140,7 @@ async def maple_task(): #메이플 공지 알림
     await bot.wait_until_ready()
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
+    last_noti = None
     
     while not bot.is_closed():
         try:
