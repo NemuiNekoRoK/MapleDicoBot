@@ -100,7 +100,6 @@ async def urs_start_task(start_time):
             #targetTime = datetime.combine(tomorrow.date(), start_time)
             #delta = targetTime - datetime.utcnow().astimezone(KST)
             #await asyncio.sleep(delta.seconds)
-            await a
 
         await asyncio.sleep(60)
         print("urs start check")
