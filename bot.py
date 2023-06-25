@@ -15,7 +15,7 @@ CHANNEL_ID = "test"
 #로컬라이즈 이전 utc 기준시간 상수
 URS_START_HOUR = 4
 URS_END_HOUR = 13
-RESET_ALTER_HOUR_CONTENT = 14
+RESET_ALTER_HOUR_CONTENT = 15
 RESET_ALTER_HOUR_BOSS = 11
 RESET_ALTER_HOUR_GUILD = 13
 
@@ -73,7 +73,7 @@ async def on_ready(): #봇 준비 명령어
     bot.loop.create_task(task_daily_content())
     bot.loop.create_task(task_weekly_content())
     bot.loop.create_task(task_guild_content())
-    #bot.loop.create_task(debugTask())
+    bot.loop.create_task(debugTask())
     #bot.loop.create_task(maple_task())
 
 #----------------------------------------
@@ -96,10 +96,11 @@ async def urs_start_task(start_time):
             channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
             await channel.send(f"{URS_START}")
         
-            now = now + timedelta(days=1)
+            start_time += timedelta(days=1)
             #targetTime = datetime.combine(tomorrow.date(), start_time)
             #delta = targetTime - datetime.utcnow().astimezone(KST)
             #await asyncio.sleep(delta.seconds)
+            await a
 
         await asyncio.sleep(60)
         print("urs start check")
@@ -123,7 +124,7 @@ async def urs_end_task(start_time):
             channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
             await channel.send(f"{URS_END}")
         
-            now = now + timedelta(days=1)
+            start_time += timedelta(days=1)
             #targetTime = datetime.combine(tomorrow.date(), start_time)
             #delta = targetTime - datetime.utcnow().astimezone(KST)
             #await asyncio.sleep(delta.seconds)
@@ -197,7 +198,7 @@ async def daily_start_task(start_time):
             channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
             await channel.send(f"{CONTENT_RESET_DAILY}")
         
-            now = now + timedelta(days=1)
+            start_time += timedelta(days=1)
             #targetTime = datetime.combine(tomorrow.date(), start_time)
             #delta = targetTime - datetime.utcnow().astimezone(KST)
             #await asyncio.sleep(delta.seconds)
@@ -227,7 +228,7 @@ async def weekly_start_task(start_time):
                 channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
                 await channel.send(f"{BOSS_RESET}")
                 
-            now = now + timedelta(days=1)
+            start_time += timedelta(days=1)
             #targetTime = datetime.combine(tomorrow.date(), start_time)
             #delta = targetTime - datetime.utcnow().astimezone(KST)
             #await asyncio.sleep(delta.seconds)
@@ -255,7 +256,7 @@ async def guild_start_task(start_time):
                 channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
                 await channel.send(f"{GUILD_CONTENT_ALTER}")
                 
-            now = now + timedelta(days=1)
+            start_time += timedelta(days=1)
             #targetTime = datetime.combine(tomorrow.date(), start_time)
             #delta = targetTime - datetime.utcnow().astimezone(KST)
             #await asyncio.sleep(delta.seconds)
@@ -272,7 +273,7 @@ async def debugTask():
     
     #await channel.send("Task3 Timestamp")
     await channel.send(f"타임스탬프 시작{time.strftime('%Y-%m-%d %X')}")
-    await timeStamp(3600)
+    await timeStamp(60)
 
 async def timeStamp(time):
     await asyncio.sleep(time)
