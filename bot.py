@@ -271,7 +271,8 @@ async def debugTask():
     time = datetime.utcnow().astimezone(KST)
     
     #await channel.send("Task3 Timestamp")
-    await channel.send(f"타임스탬프 시작{time.strftime('%Y-%m-%d %X')}")
+    #await channel.send(f"타임스탬프 시작{time.strftime('%Y-%m-%d %X')}")
+    print(f"타임스탬프 시작{time.strftime('%Y-%m-%d %X')}")
     await timeStamp(60)
 
 async def timeStamp(time):
@@ -279,7 +280,8 @@ async def timeStamp(time):
     guild = bot.get_guild(GUILD_ID)
     channel = discord.utils.get(guild.channels, name=CHANNEL_ID)
     t = datetime.utcnow().astimezone(KST)
-    await channel.send(f"디버깅 타임스탬프 {t.strftime('%Y-%m-%d %X')}")
+    #await channel.send(f"디버깅 타임스탬프 {t.strftime('%Y-%m-%d %X')}")
+    print(f"디버깅 타임스탬프 {t.strftime('%Y-%m-%d %X')}")
     await timeStamp(time)
 
 #--------------------------------------
