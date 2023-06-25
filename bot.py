@@ -78,8 +78,8 @@ async def on_ready(): #봇 준비 명령어
 #----------------------------------------
 async def task_urs_start():
     print("start")
-    start_time = datetime(now.year, now.month, now.day, URS_START_HOUR_KST).astimezone(KST) #각종 변수 세팅
-    if now.hour >= URS_START_HOUR_KST:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
+    start_time = datetime(now.year, now.month, now.day, URS_START_HOUR).astimezone(KST) #각종 변수 세팅
+    if now.hour >= URS_START_HOUR:  # 현재 시간이 URS_END_HOUR 이후라면 다음 날로 설정
         start_time += timedelta(days=1)
     
     await urs_start_task(start_time)
@@ -290,32 +290,9 @@ async def 핑(ctx):
 #--------------------------------------    
 @bot.command(aliases=['h']) #도움말 명령어
 async def 도움말(ctx):
-    help_message = "~우르스(ㅇㄽ,ㅇㄹㅅ) : 우르스 2배 이벤트 시작시간 또는 남은 시간을 알려줍니다. \n ~MVP효율(ㅇㅂㅍ) : MVP작 효율 계산기를 불러옵니다. \n ~재획(ㅈㅎ) : 재획 타이머를 시작합니다. \n ~보스분배(ㅂㅂㄱ) : 보스 수익금 분배 계산합니다."
+    help_message = "~MVP효율(ㅇㅂㅍ) : MVP작 효율 계산기를 불러옵니다. \n ~재획(ㅈㅎ) : 재획 타이머를 시작합니다. \n ~보스분배(ㅂㅂㄱ) : 보스 수익금 분배 계산합니다."
     await ctx.send(help_message)
 
-
-#--------------------------------------
-#             우르스 커맨드
-#--------------------------------------
-@bot.command(aliases=['ㅇㄽ','ㅇㄹㅅ']) #우르스 명령어
-async def 우르스(ctx):
-    current_time = datetime.utcnow().astimezone(KST)
-    urs_start_time = datetime(current_time.year, current_time.month, current_time.day, URS_START_HOUR).astimezone(KST)
-    time_until_urs_start = urs_start_time - current_time
-    seconds_until_urs_start = int(time_until_urs_start.total_seconds())
-
-    if current_time.hour < URS_START_HOUR_KST: #utc날짜차이 예외처리
-        hours, remainder = divmod(time_until_urs_start.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        await ctx.send(f"우르스 2배 아직 시작 안했어! {URS_START_HOUR_KST} 시에 시작합니다. → {hours}시간 {minutes}분 {seconds}초")
-    elif current_time.hour >= URS_END_HOUR_KST:
-        await ctx.send("우르스 2배 이미 끝났습니다.")
-    else:
-        urs_end_time = datetime(current_time.year, current_time.month, current_time.day, URS_END_HOUR).astimezone(KST)
-        time_until_urs_end = urs_end_time - current_time
-        hours, remainder = divmod(time_until_urs_end.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        await ctx.send(f"우르스 2배 진행 중 입니다.. → {hours}시간 {minutes}분 {seconds}초")
 #------------------
 # 테스트
 #---------------------
