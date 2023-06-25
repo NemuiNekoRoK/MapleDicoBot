@@ -165,6 +165,7 @@ async def maple_task(): #메이플 공지 알림
                         embed = discord.Embed(title="새로운 공지가 올라왔어!", description=f'{notice_title}',url = f'{notice_link}' ,color=discord.Color.green())
                         embed.set_thumbnail(url = EMBED_ICON_URL)
                         await channel.send(embed=embed)
+                        print("새 공지!")
                         
                     else :
                         print("업데이트된 공지 없음")
