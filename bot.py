@@ -507,3 +507,4 @@ async def 보스분배(ctx):
     #환산기 사이트 구현해보자
 
 bot.run(TOKEN)
+//test
